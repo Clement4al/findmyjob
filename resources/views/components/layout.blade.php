@@ -11,7 +11,7 @@
         rel="stylesheet">
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
-<body class="bg-black text-white font-hanken-grotesk">
+<body class="bg-black text-white font-hanken-grotesk pb-20">
     <div class="px-10">
         <nav class="flex justify-between items-center py-4 border-b border-white/10">
             <div>
@@ -20,16 +20,30 @@
                 </a>
             </div>
             <div class="space-x-6 font-bold">
-                <a href="#">Job</a>
-                <a href="#">Career</a>
-                <a href="#">Salaries</a>
-                <a href="#">Companies</a>
+                <x-nav-link href="/home" :active="request()->is('home')">Home</x-nav-link>  
+                <x-nav-link href="/about" :active="request()->is('about')">About Us</x-nav-link>
+                <x-nav-link href="/companies" :active="request()->is('companies')">Companies</x-nav-link>  
             </div>
+            @auth
+                <div class="space-x-6 font-bold flex">
+                    <x-nav-link href="/jobs/create" :active="request()->is('jobs/create')">Post a Job</x-nav-link>  
 
-            <div>
-                <a href="">Post a Job</a>
-            </div>
-        </nav>
+                    <form method="POST" action="/logout">
+                        @csrf
+                        @method('DELETE')
+                        <x-forms.button>Log Out</x-forms.button>
+                    </form>
+                </div>
+            @endauth
+
+            @guest
+                <div class="space-x-6 font-bold">
+                    <x-nav-link href="/register" :active="request()->is('register')">Register</x-nav-link>  
+                    <x-nav-link href="/login" :active="request()->is('login')">Login</x-nav-link>  
+
+                </div>
+            @endguest
+            </nav>
 
         <main class="mt-10 max-w-[986px] mx-auto">
             {{ $slot}}
